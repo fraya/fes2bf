@@ -55,7 +55,7 @@ class Main : AbstractMain
 
       if (compile)
       {
-        tmp := File.createTemp("bf-", "fan")
+        tmp := File.createTemp("bf-", ".fan")
 
         asm := BfeFanTranspiler().compile(optimized)
         out := tmp.out
