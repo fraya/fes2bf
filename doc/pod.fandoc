@@ -1,0 +1,79 @@
+Overview [#overview]
+********************
+Brainfuck interpreter written in Fantom.
+
+How it works [#works]
+*********************
+The interpreter parses the source code and transform it to
+'Instruction's. Every character is a comment except '<', '>', '+',
+'-', '.', '[', and ']' that are instructions.
+
+The program is optimized and interpreted.
+
+Running a program
+*****************   
+To execute a brainfuck program called 'hello.bf' use:
+
+  fan fes2brainfuck hello.bf
+  
+Debug
+*****
+To show debug information use the '-debug' option:
+
+  fan fes2brainfuck -debug hello.bf
+
+Optimization
+************
+By default every program is optimized as follows:
+
+0. No optimization.
+1. Remove comments.
+2. Group instructions.
+3. Precalculate jumps.
+
+The optimization is controlled by the 'optimize' option followed by a
+number between '0' and '3'. Every optimization includes the
+optimizations with a number smaller than the number passed. For
+instance, an optimization of '2' (group instructions) includes the
+optimization '1' (remove comments).
+
+  fan fes2brainfuck -optimization 2 hello.bf
+
+Remove comments
+===============
+All characters from source code are transformed in objects of the
+class `Comment`. Even this class does nothing when executed, we can
+save time removing it.
+
+  fan fes2brainfuck -optimization 1 hello.bf
+
+Group optimization
+==================
+
+A group of instructions of the same type are grouped in one. For
+instance, a group of three `IncrementData`, '+++', is optimized as one
+'3+'. The group of instructions are subclasses of `AmountInstruction`,
+`IncrementData`, `DecrementData`, `IncrementPointer` and
+`DecrementPointer`.
+
+  fan fes2brainfuck -optimization 2 hello.bf
+
+Precalculate jumps
+==================
+When an instruction `JumpForward` is executed, it must move to the
+pair `JumpBackward` instruction. This process can be faster if we
+precalculate the jump ahead. Every `JumpForward` is changed with a
+`PrecalculatedJumpForward` with a fix instruction address. At the same
+time the `JumpBackward` instruction is removed and changed for a
+`PrecalculatedJumbBackward`.
+
+By default all programs are optimized to level '3', so passing
+'-optimization 3' and nothing is the same.
+
+  fan fes2brainfuck hello.bf
+
+Examples
+********
+In folder the 'res/' there are some brainfuck programs. I'm sorry I don't
+remember the source of all of them. There are more examples in:
+`http://esoteric.sange.fi/brainfuck/bf-source/prog/`
