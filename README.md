@@ -8,8 +8,8 @@ It contains an interpreter with different optimizations and a
 Fantom code.
 
 This little project is an exploration of Object Oriented Programming and
-the blog of [Yegor Bugayenko](https://www.yegor256.com/). It emphasizes the
-use of _const_ or immutable classes.
+ideas from the blog of [Yegor Bugayenko](https://www.yegor256.com/). It emphasizes the
+use of immutable classes, small classes and no static methods.
 
 ## Installation
 
@@ -28,7 +28,7 @@ the project directory and execute:
 this should build a `fes2bf.pod` and put it in the `lib` directory of
 Fantom's distribution.
 
-### Install from the `pod` repository
+### Install from the pod repository
 
 If Fantom is installed you just only need to download the package from the
 [Fantom Pod Repository](http://eggbox.fantomfactory.org/).
@@ -78,3 +78,29 @@ where `n` can be
 - `4` Precalculate jumps (and previous)
 
 By default optimizations are set to maximum level.
+
+### Anecdotal benchmark
+
+A simple benchmark in a Intel(R) Core(TM) i5-7400 CPU @ 3.00GHz
+_taken from the trash_, shows the effect of the different
+optimizations.
+
+| Optimization         | `bench.b` | _Transpiled_ |
+|----------------------|-----------|--------------|
+| (0) No optimization  |   21.445s |       6.554s |
+| (1) Remove comments  |   20.886s |       6.296s |
+| (2) Group            |   14.260s |       4.319s |
+| (3) Zero             |    3.567s |       1.784s |
+| (4) Calculated Jumps |    2.538s |       1.753s |
+
+`res/mandelbrot.b`
+
+| Optimization         | `mandelbrot.b` | _Transpiled_    |
+|----------------------|----------------|-----------------|
+| (0) No optimization  |      5m17.643s |       Error(*)  |
+| (1) Remove comments  |      5m10.597s |       Error(*)  |
+| (2) Group            |      1m32.024s |       9.881s    |
+| (3) Zero             |      1m28.525s |       9.554s    |
+| (4) Calculated Jumps |        35.152s |       9.513s    |
+
+(*) Issue #1
